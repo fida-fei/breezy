@@ -46,6 +46,34 @@ with col3:
         "Wind Direction",
         f"{latest['wind_direction_10m']:.0f}°"
     )
+# Wind speed history
+st.subheader("Wind Speed History")
+
+recent_data = df.tail(48).set_index("time")
+
+st.line_chart(
+    recent_data["wind_speed_10m"],
+    y_label="Wind Speed (km/h)",
+    x_label="Time"
+)
+# Wind direction distribution
+st.subheader("Wind Direction Distribution")
+
+directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+
+direction_labels = (
+    ((df["wind_direction_10m"] + 22.5) % 360) // 45
+).astype(int).map(dict(enumerate(directions)))
+
+direction_counts = direction_labels.value_counts().reindex(
+    directions, fill_value=0
+)
+
+st.bar_chart(
+    direction_counts,
+    y_label="Number of observations",
+    x_label="Wind Direction"
+)
     
 # Welcome section
 st.info("Welcome to Breezy! Your wind prediction dashboard is coming to life.")

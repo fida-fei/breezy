@@ -1,11 +1,36 @@
 import streamlit as st
 import pandas as pd
+import joblib
 
 # Load weather dataset
 df = pd.read_csv("data/weather_data.csv")
 
 # Convert time column
 df["time"] = pd.to_datetime(df["time"])
+
+# Load trained wind speed model
+saved_model = joblib.load("models/wind_speed_model.pkl")
+
+model = saved_model["model"]
+features = saved_model["features"]
+
+# Prepare features for wind speed prediction
+df["hour"] = df["time"].dt.hour
+df["month"] = df["time"].dt.month
+
+df["previous_hour_wind"] = df["wind_speed_10m"].shift(1)
+df["wind_2_hours_ago"] = df["wind_speed_10m"].shift(2)
+df["wind_3_hours_ago"] = df["wind_speed_10m"].shift(3)
+
+# Predict wind speed for the next hour
+latest_features = df[features].iloc[[-1]]
+predicted_wind_speed = model.predict(latest_features)[0]
+
+st.subheader("Wind Speed Prediction")
+st.metric(
+    "Predicted Wind Speed (Next Hour)",
+    f"{predicted_wind_speed:.1f} km/h"
+)
 
 # Page configuration
 st.set_page_config(

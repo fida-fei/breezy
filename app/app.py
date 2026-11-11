@@ -56,6 +56,10 @@ st.write(
 latest = df.iloc[-1]
 
 st.subheader("Weather Overview")
+st.caption(
+    f"Historical data: {df['time'].min():%d %b %Y} "
+    f"to {df['time'].max():%d %b %Y}"
+)
 
 col1, col2, col3 = st.columns(3)
 

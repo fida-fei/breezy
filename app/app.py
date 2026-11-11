@@ -27,6 +27,11 @@ latest_features = df[features].iloc[[-1]]
 predicted_wind_speed = model.predict(latest_features)[0]
 
 st.subheader("Wind Speed Prediction")
+prediction_time = df["time"].iloc[-1] + pd.Timedelta(hours=1)
+
+st.caption(
+    f"Prediction for: {prediction_time.strftime('%d %b %Y, %I:%M %p')}"
+)
 st.metric(
     "Predicted Wind Speed (Next Hour)",
     f"{predicted_wind_speed:.1f} km/h"

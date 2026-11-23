@@ -150,6 +150,55 @@ The Random Forest model reduced the test MAE by approximately **11.8% compared w
 
 These are preliminary results from a historical dataset. Further testing on later unseen weather data is needed to evaluate real-world forecasting reliability.
 
+### Model Error Analysis
+
+Further analysis was performed on the test predictions to understand how prediction errors vary under different wind conditions.
+
+**1. Prediction Bias by Wind Speed**
+
+| Actual Wind Speed | Mean Residual (km/h) | Observation |
+|---|---:|---|
+| 0–5 km/h | +1.69 | Overprediction |
+| 5–10 km/h | -0.81 | Underprediction |
+| 10–15 km/h | -2.09 | Underprediction |
+| 15–20 km/h | -2.47 | Underprediction |
+| Above 20 km/h | -0.70 | Limited observations |
+
+Residual is calculated as predicted wind speed minus actual wind speed.
+
+The model tends to overpredict weaker winds and underpredict stronger winds. This suggests that it has difficulty capturing extreme wind conditions.
+
+**2. Prediction Errors During Wind Speed Changes**
+
+| Wind Speed Change | Average Absolute Error (km/h) |
+|---|---:|
+| Sharp decrease | 3.71 |
+| Moderate decrease | 2.04 |
+| Stable | 1.29 |
+| Moderate increase | 2.96 |
+| Sharp increase | 5.81 |
+
+The model performs best when wind speed remains relatively stable. Sudden increases in wind speed produce the highest average prediction error.
+
+**3. Residual Analysis**
+
+| Metric | Result |
+|---|---:|
+| Mean Residual | -0.44 km/h |
+| Standard Deviation | 2.69 km/h |
+| Maximum Overprediction | 7.30 km/h |
+| Maximum Underprediction | 12.40 km/h |
+
+The negative mean residual indicates a slight overall underprediction bias.
+
+**4. Key Findings**
+
+- The model performs better under relatively stable wind conditions.
+- Prediction errors increase during sudden wind speed changes.
+- Weak wind conditions tend to be overpredicted.
+- Stronger wind conditions tend to be underpredicted.
+- Further improvements are needed to capture rapid changes and stronger wind conditions.
+
 ### Visualizations
 
 **Feature Importance**
